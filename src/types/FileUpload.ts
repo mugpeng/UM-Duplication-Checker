@@ -5,4 +5,5 @@ export interface FileUploadState {
   status: 'idle' | 'uploading' | 'success' | 'error';
   error?: string;
   result?: string;
+  sessionId: string | null;
 }

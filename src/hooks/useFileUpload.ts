@@ -37,6 +37,7 @@ export function useFileUpload(onAnalysisComplete?: (results: AnalysisResult) => 
     files: [],
     progress: 0,
     status: 'idle',
+    sessionId: null,
   });
 
   const handleDragOver = useCallback((e: React.DragEvent) => {
@@ -97,6 +98,14 @@ export function useFileUpload(onAnalysisComplete?: (results: AnalysisResult) => 
         const errorData = await uploadResponse.text();
         throw new Error(`Upload failed: ${errorData}`);
       }
+
+      const uploadData = await uploadResponse.json();
+      const sessionId = uploadData.session_id;
+
+      setState(prev => ({
+        ...prev,
+        sessionId
+      }));
 
       // Start listening for progress updates
       const eventSource = new EventSource('http://localhost:8001/progress');
@@ -160,14 +169,26 @@ export function useFileUpload(onAnalysisComplete?: (results: AnalysisResult) => 
     }
   }, [state.files, onAnalysisComplete]);
 
-  const handleClear = useCallback(() => {
-    setState({
-      file: null,
-      files: [],
-      progress: 0,
-      status: 'idle'
-    });
-  }, []);
+  const handleClear = useCallback(async () => {
+    try {
+      if (state.sessionId) {
+        // Clean up session-specific files
+        await fetch(`http://localhost:8001/cleanup/${state.sessionId}`, {
+          method: 'POST'
+        });
+      }
+      
+      setState({
+        file: null,
+        files: [],
+        progress: 0,
+        status: 'idle',
+        sessionId: null
+      });
+    } catch (error) {
+      console.error('Error during cleanup:', error);
+    }
+  }, [state.sessionId]);
 
   const handleFileDelete = useCallback((index: number) => {
     if (index === -1) {

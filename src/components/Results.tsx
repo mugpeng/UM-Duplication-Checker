@@ -37,6 +37,12 @@ const cleanFileName = (filename: string): string => {
 
 // Helper function to download CSV
 const downloadCSV = (results: AnalysisResult) => {
+  // Get current date and time for filename
+  const now = new Date();
+  const dateStr = now.toLocaleDateString('en-US', { year: 'numeric', month: '2-digit', day: '2-digit' }).replace(/\//g, '');
+  const timeStr = `${String(now.getHours()).padStart(2, '0')}${String(now.getMinutes()).padStart(2, '0')}`;
+  const filename = `similar_pairs_analysis_${dateStr}_${timeStr}.csv`;
+
   // Combine top_pairs and similar_images, sort by clip_score/similarity_score
   const allPairs = [
     ...results.top_pairs.map(pair => ({
@@ -69,7 +75,7 @@ const downloadCSV = (results: AnalysisResult) => {
   const link = document.createElement('a');
   const url = URL.createObjectURL(blob);
   link.setAttribute('href', url);
-  link.setAttribute('download', 'similar_pairs_analysis.csv');
+  link.setAttribute('download', filename);
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);

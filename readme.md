@@ -1,8 +1,7 @@
 # DeepChecker
 
 A fast and accurate image duplication detection tool that combines CLIP (Contrastive Language-Image Pre-Training) and SIFT (Scale-Invariant Feature Transform) algorithms to identify duplicate and similar images.
-![Uploading image.png…]()
-
+![image](https://github.com/user-attachments/assets/f3367190-93fc-4e6e-9b26-b0ed1f31a2e2)
 
 ## Features
 

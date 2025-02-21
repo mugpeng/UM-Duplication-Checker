@@ -1,7 +1,7 @@
-# AAA Duplication Checker
+# DeepChecker
 
 A fast and accurate image duplication detection tool that combines CLIP (Contrastive Language-Image Pre-Training) and SIFT (Scale-Invariant Feature Transform) algorithms to identify duplicate and similar images.
-
+![Uploading image.png…]()
 
 
 ## Features
